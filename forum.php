@@ -1590,6 +1590,12 @@ class plgGroupsForum extends \Qubeshub\Plugin\Plugin
 		$params = Component::params('com_groups');
 		if ($params->get('email_forum_comments') && (isset($moving) && $moving == false))
 		{
+			// A notification failure must never break the post submission: the
+			// post is already saved, so any error here (mail send, template
+			// render, bad recipient) is logged and swallowed instead of
+			// aborting the request and skipping the redirect to the new post.
+			try
+			{
 			$thread->set('section', $section->get('alias'));
 			$thread->set('category', $category->get('alias'));
 
@@ -1681,6 +1687,11 @@ class plgGroupsForum extends \Qubeshub\Plugin\Plugin
 				{
 					$this->setError(Lang::txt('GROUPS_ERROR_EMAIL_MEMBERS_FAILED'));
 				}
+			}
+			}
+			catch (\Throwable $e)
+			{
+				Log::error('Group forum post notification failed for post ' . $post->get('id', 0) . ': ' . $e->getMessage());
 			}
 		}
 
