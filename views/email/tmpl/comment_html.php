@@ -150,7 +150,7 @@ $preheader = (!$this->post->get('anonymous') ? $this->post->creator->get('name')
 										{
 											$attachment->set('description', $attachment->get('filename'));
 										}
-										echo '<p class="attachment" style="margin: 0.5em 0; padding: 0 0 0 0.5em; text-align: left;"><a class="' . ($attachment->isImage() ? 'img' : 'file') . '" data-filename="' . $attachment->get('filename') . '" href="' . $base . '/' . trim(Route::url($this->thread->link()), '/') . '/' . $attachment->get('post_id') . '/' . $attachment->get('filename') . '">' . $attachment->get('description') . '</a></p>';
+										echo '<p class="attachment" style="margin: 0.5em 0; padding: 0 0 0 0.5em; text-align: left;"><a class="' . ($attachment->isImage() ? 'img' : 'file') . '" data-filename="' . $this->escape($attachment->get('filename')). '" href="' . $base . '/' . trim(Route::url($this->thread->link()), '/') . '/' . $attachment->get('post_id') . '/' . $this->escape($attachment->get('filename')) . '">' . $this->escape($attachment->get('description')) . '</a></p>';
 									}
 									?>
 								</div>
